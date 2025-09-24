@@ -1,25 +1,26 @@
 import sqlite3
-
-DB_PATH = 'src/alunos.db'
-
-
-conexao = sqlite3.connect(DB_PATH)
-cursor = conexao.cursor()
+import os
 
 
-sql_create_table = '''
-CREATE TABLE IF NOT EXISTS Aluno (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    nome TEXT NOT NULL,
-    cpf TEXT UNIQUE NOT NULL,
-    data_nascimento TEXT NOT NULL,
-    telefone TEXT
-);
-'''
+DB_PATH = os.path.join(os.path.dirname(__file__), 'alunos.db')
+
+def get_connection():
+    return sqlite3.connect(DB_PATH)
 
 
-cursor.execute(sql_create_table)
+def criar_tabela():
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS Aluno (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                nome TEXT NOT NULL,
+                cpf TEXT UNIQUE NOT NULL,
+                data_nascimento TEXT NOT NULL,
+                status TEXT NOT NULL
+            );
+        ''')
+        conn.commit()
 
 
-conexao.commit()
-conexao.close()
+criar_tabela()
