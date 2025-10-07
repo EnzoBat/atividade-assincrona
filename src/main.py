@@ -1,5 +1,10 @@
 from aluno import Aluno
 from crud import create_aluno, read_aluno_by_id, read_alunos, update_aluno, delete_aluno
+from interface import criar_interface
+
+if __name__ == "__main__":
+    criar_interface()
+
 
 def main():
     print("=== TESTANDO CRUD ===")
