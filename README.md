@@ -8,5 +8,5 @@
 
 Atividade dia 15 de outubro
 o sistema é bem básico, com espaços digitáveis para inserir os dados básicos(CPF, Nome etc..)
-Você pode adicionar, consultar(terminar a interação com o usuário selecionado), atualizar(atualizar os dados do usuario seleciobado) e excluir(excluir o usuário selecionado do banco de dados)
+Você pode adicionar, Perfil(analisar o usuario de forma dinamica), atualizar(atualizar os dados do usuario seleciobado) e excluir(excluir o usuário selecionado do banco de dados)
 Tem uma função de busca onde você insere o nome do usuário que deseja encontra e se quer ver apenas usuários com mesmo nome ativos
