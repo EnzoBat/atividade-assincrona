@@ -26,7 +26,7 @@ def criar_janela_principal():
     entrada_status = tk.Entry(janela, width=50)
     entrada_status.pack(pady=5)
 
-    # --- BARRA DE RELATÓRIOS (FILTROS) ---
+    # --- Barra de filtros ---
     barra = tk.Frame(janela, bg="#f0f0f0")
     barra.pack(pady=5, fill="x")
 
@@ -60,7 +60,6 @@ def criar_janela_principal():
             messagebox.showerror("Erro", f"Falha ao carregar lista: {e}")
 
     def aplicar_filtros(alunos, nome_busca, somente_ativos):
-        # alunos: lista de tuplas (id, nome, cpf, data_nascimento, status)
         if nome_busca:
             nb = nome_busca.strip().lower()
             alunos = [a for a in alunos if nb in (a[1] or "").lower()]
@@ -69,7 +68,6 @@ def criar_janela_principal():
         return alunos
 
     def carregar_relatorio():
-        # Limpa a tabela e carrega com base nos filtros
         for item in tabela.get_children():
             tabela.delete(item)
         try:
@@ -163,6 +161,37 @@ def criar_janela_principal():
         entrada_status.delete(0, tk.END)
         entrada_status.insert(0, valores[4])
 
+    def abrir_popup_detalhes_aluno():
+        selected = tabela.selection()
+        if not selected:
+            messagebox.showwarning("Aviso", "Selecione um aluno para consultar.")
+            return
+
+        valores = tabela.item(selected[0])['values']
+
+        popup = tk.Toplevel(janela)
+        popup.title("Perfil do Aluno")
+        popup.geometry("400x300")
+        popup.configure(bg="white")
+
+        tk.Label(popup, text="Dados do Aluno", font=("Arial", 14, "bold"), bg="white").pack(pady=10)
+
+        campos = {
+            "ID": valores[0],
+            "Nome": valores[1],
+            "CPF": valores[2],
+            "Data de Nascimento": valores[3],
+            "Status": valores[4]
+        }
+
+        for rotulo, valor in campos.items():
+            linha = tk.Frame(popup, bg="white")
+            linha.pack(fill="x", padx=20, pady=5)
+            tk.Label(linha, text=f"{rotulo}:", width=20, anchor="w", font=("Arial", 10, "bold"), bg="white").pack(side="left")
+            tk.Label(linha, text=str(valor), anchor="w", bg="white").pack(side="left", fill="x")
+
+        tk.Button(popup, text="Fechar", command=popup.destroy, bg="#d9534f", fg="white").pack(pady=20)
+
     # --- Botões ---
     frame_botoes = tk.Frame(janela, bg="#f0f0f0")
     frame_botoes.pack(pady=10)
@@ -170,9 +199,9 @@ def criar_janela_principal():
     tk.Button(frame_botoes, text="Cadastrar", width=15, bg="#4CAF50", fg="white", command=cadastrar).grid(row=0, column=0, padx=5)
     tk.Button(frame_botoes, text="Atualizar", width=15, bg="#2196F3", fg="white", command=atualizar).grid(row=0, column=1, padx=5)
     tk.Button(frame_botoes, text="Excluir", width=15, bg="#f44336", fg="white", command=excluir).grid(row=0, column=2, padx=5)
-    tk.Button(frame_botoes, text="Consultar", width=15, bg="#9C27B0", fg="white", command=carregar_relatorio).grid(row=0, column=3, padx=5)
+    tk.Button(frame_botoes, text="Perfil", width=15, bg="#9C27B0", fg="white", command=abrir_popup_detalhes_aluno).grid(row=0, column=3, padx=5)
 
-    # --- Treeview ---
+    # --- Tabela principal ---
     colunas = ("id", "nome", "cpf", "data_nascimento", "status")
     tabela = ttk.Treeview(janela, columns=colunas, show="headings", height=10)
     for c in colunas:
@@ -189,3 +218,4 @@ def criar_janela_principal():
 
     carregar_relatorio()
     janela.mainloop()
+
